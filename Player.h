@@ -6,9 +6,9 @@ class Player : public GObject
 {
 public:
 
-	Player() : GObject() {}
-	Player(int xPos, int yPos) : GObject(xPos, yPos) {}
-	Player(Vector2D position) : GObject(position) {}
+	Player()					: GObject() {}
+	Player(int xPos, int yPos)	: GObject(xPos, yPos) {}
+	Player(Vector2D position)	: GObject(position) {}
 
 	void Move(const char input)
 	{

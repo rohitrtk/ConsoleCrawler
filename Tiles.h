@@ -16,11 +16,12 @@ public:
 
 	Tile(const char chr) : chr(chr) {}
 
-	inline virtual const char& GetChr() const { return this->chr; }
-	inline virtual void SetChr(char chr) { this->chr = chr; }
+	inline virtual const char& GetChr() const							{ return this->chr; }
+	inline virtual void SetChr(char chr)								{ this->chr = chr; }
 
-	inline virtual bool IsPlayerOnTile() const { return this->playerOnTile; }
-	inline virtual void SetIsPlayerOnTile(bool playerOnTile) { this->playerOnTile = playerOnTile; }
+	inline virtual bool IsObjectOnTile() const							{ return this->objectOnTile != nullptr; }
+	inline virtual class GObject* GetObjectOnTile() const				{ return this->objectOnTile; }
+	inline virtual void SetObjectOnTile(class GObject* object)			{ this->objectOnTile = object; }
 
 
 protected:
@@ -28,7 +29,7 @@ protected:
 	// Character that represents this tile on screen
 	char chr;
 
-	bool playerOnTile;
+	class GObject* objectOnTile = nullptr;
 };
 
 class Wall : public Tile

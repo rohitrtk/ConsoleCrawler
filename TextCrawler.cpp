@@ -2,34 +2,54 @@
 #include "Level.h"
 #include "Tiles.h"
 #include "Player.h"
+#include "GObject.h"
 #include "LevelComponents.h"
 #include <iostream>
 #include <string>
+#include <memory>
 #include <stdlib.h>
 
 const char* PATH_LEVEL_1 = "Maps/Level1.txt";
 
-void PrintLevel(const TileArray& level, Player& player)
+std::unique_ptr<Player>		player;
+std::unique_ptr<Level>		level;
+std::shared_ptr<GObjective> objective;
+
+void PrintLevel()
 {
-	for (int y = 0; y < level.size(); ++y)
+	const TileArray& levelTiles = level->GetTiles();
+
+	for (std::size_t y = 0; y < levelTiles.size(); ++y)
 	{
-		for (int x = 0; x < level.at(y).size(); ++x)
+		for (std::size_t x = 0; x < levelTiles.at(y).size(); ++x)
 		{
-			Tile t = level[y][x];
-			Vector2D currentIndex = { x, y };
+			Tile t = levelTiles[y][x];
+			Vector2D currentIndex( static_cast<int>(x), static_cast<int>(y) );
 
-			if (player.GetPosition() == currentIndex)
+			if (player && player->GetPosition() == currentIndex)
 			{
-				t.SetIsPlayerOnTile(true);
+				t.SetObjectOnTile(player.get());
 			}
-			else 
+			//else if (objective && objective->GetPosition() == currentIndex)
+			//{
+			//	t.SetObjectOnTile(objective);
+			//}
+			else
 			{
-				t.SetIsPlayerOnTile(false);
+				t.SetObjectOnTile(nullptr);
 			}
 
-			if (t.IsPlayerOnTile())
+			GObject* obj = t.GetObjectOnTile();
+			if (obj)
 			{
-				std::cout << TileConstants::TILE_PLAYER;
+				if (obj = dynamic_cast<Player*>(obj))
+				{
+					std::cout << TileConstants::TILE_PLAYER;
+				}
+				else if (obj = dynamic_cast<GObjective*>(obj))
+				{
+					std::cout << TileConstants::TILE_OBJ;
+				}
 			}
 			else
 			{
@@ -51,19 +71,18 @@ const std::string GetInput()
 
 int main()
 {
-	Level level(PATH_LEVEL_1);
-	Player player;
+	level = std::make_unique<Level>(PATH_LEVEL_1);
+	player = std::make_unique<Player>();
+	objective = std::make_unique<GObjective>();
 
-	level.AddComponent<SpawnerComponent>();
+	SpawnerComponent sc = level->AddComponent<SpawnerComponent>();
+	objective.reset(sc.SpawnThing<GObjective>(Vector2D(0,0), Vector2D(10,10))); // NTF
 
 	bool isRunning = true;
 
-	SpawnerComponent s = level.GetComponent<SpawnerComponent>();
-	s.SpawnThing<Player>(Vector2D(0,0) , Vector2D(10, 10));
-
 	while (isRunning)
 	{
-		PrintLevel(level.GetTiles(), player);
+		PrintLevel();
 		std::string input = GetInput();
 
 		system("CLS");
@@ -74,9 +93,10 @@ int main()
 			isRunning = false;
 			break;
 		}
-		else if (input[0] == 'w' || input[0] == 's' || input[0] == 'd' || input[0] == 'a')
+		else if (input[0] == 'w' || input[0] == 's' 
+			  || input[0] == 'd' || input[0] == 'a')
 		{
-			player.Move(input[0]);
+			player->Move(input[0]);
 		}
 
 		

@@ -4,6 +4,7 @@
 #include "LevelComponents.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 using TileArray = std::vector<std::vector<Tile>>;
 

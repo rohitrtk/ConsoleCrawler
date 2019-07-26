@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <sstream>
 
 Level::Level(const char* levelPath)
 {
@@ -50,7 +51,9 @@ std::vector<std::string> Level::ReadTextFromFile(const char* levelPath)
 
 	if (!file.is_open())
 	{
-		std::cerr << "Unable to open map" << std::endl;
+		std::stringstream ss;
+		ss << "Unable to open map file " << levelPath;
+		throw ss.str();
 		return lines;
 	}
 

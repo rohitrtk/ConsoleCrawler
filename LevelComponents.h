@@ -17,7 +17,9 @@ class SpawnerComponent : public Component
 {
 public:
 
-	virtual void Init() override;
+	inline virtual void Init() override
+	{
+	}
 	
 	template<typename T>
 	T* SpawnThing(Vector2D minPos, Vector2D maxPos)
@@ -34,7 +36,9 @@ public:
 		Vector2D position(x, y);
 
 		std::unique_ptr<T> thing = std::make_unique<T>(position);
-		std::cout << x << "," << y << std::endl;
+		
+		std::cout << "Spawned thing at " << x << "," << y << std::endl;
+
 		return thing.get();
 	}
 };
