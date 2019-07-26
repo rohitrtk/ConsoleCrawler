@@ -39,18 +39,6 @@ void PrintLevel(const TileArray& level, Player& player)
 
 		std::cout << std::endl;
 	}
-
-	/*
-	for (const auto& y : level)
-	{
-		for (const auto& x : y)
-		{
-			std::cout << x.GetChr();
-		}
-
-		std::cout << std::endl;
-	} 
-	*/
 }
 
 const std::string GetInput()
@@ -69,6 +57,9 @@ int main()
 	level.AddComponent<SpawnerComponent>();
 
 	bool isRunning = true;
+
+	SpawnerComponent s = level.GetComponent<SpawnerComponent>();
+	s.SpawnThing<Player>(Vector2D(0,0) , Vector2D(10, 10));
 
 	while (isRunning)
 	{

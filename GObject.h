@@ -8,14 +8,48 @@ namespace Direction
 	constexpr char LEFT = 'a';
 }
 
-struct Vector2D
+class Vector2D
 {
+public:
 	int x;
 	int y;
 
-	bool operator == (const Vector2D& other)
+	Vector2D() : x(0), y(0) {}
+	Vector2D(int x, int y) : x(x), y(y) {}
+
+	bool operator < (Vector2D& other)
+	{
+		return x < other.x && y < other.y;
+	}
+
+	bool operator > (Vector2D& other)
+	{
+		return x > other.x && y > other.y;
+	}
+
+	bool operator <= (Vector2D& other)
+	{
+		return x <= other.x && y <= other.y;
+	}
+
+	bool operator >= (Vector2D& other)
+	{
+		return x >= other.x && y >= other.y;
+	}
+
+	bool operator == (Vector2D& other)
 	{
 		return x == other.x && y == other.y;
+	}
+
+	bool lto(Vector2D& other)
+	{
+		return x < other.x || y < other.y;
+	}
+
+	bool gto(Vector2D& other)
+	{
+		return x > other.x || y > other.y;
 	}
 };
 

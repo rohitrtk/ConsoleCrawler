@@ -20,16 +20,21 @@ public:
 	virtual void Init() override;
 	
 	template<typename T>
-	T* SpawnThing(const Vector2D& maxPos, const Vector2D& minPos = {0, 0})
+	T* SpawnThing(Vector2D minPos, Vector2D maxPos)
 	{
+		if (maxPos < minPos)
+		{
+			throw "Invalid spawn parameters!";
+		}
+
 
 		int x = Level::GenerateRandom(minPos.x, maxPos.x - 1);
 		int y = Level::GenerateRandom(minPos.y, maxPos.y - 1);
 		
-		Vector2D position = { x, y };
+		Vector2D position(x, y);
 
 		std::unique_ptr<T> thing = std::make_unique<T>(position);
-
-		return thing;
+		std::cout << x << "," << y << std::endl;
+		return thing.get();
 	}
 };

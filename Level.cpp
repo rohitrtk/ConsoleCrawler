@@ -67,6 +67,8 @@ std::vector<std::string> Level::ReadTextFromFile(const char* levelPath)
 
 int Level::GenerateRandom(int low, int high)
 {
+	if (low > high) return 0;
+
 	std::random_device device;
 	std::mt19937 generator(device());
 	std::uniform_int_distribution<int> distribution(low, high);
